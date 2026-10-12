@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Archivos de configuración local con claves sensibles
+config.json
+.env
+
+# Logs y temporales
+*.log
+.DS_Store
+Thumbs.db
