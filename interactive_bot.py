@@ -128,17 +128,37 @@ class SaiaEngine:
 
     def verify_session(self, cookie=None):
         chk_cookie = cookie or self.session_cookie
+        # Reusar el cliente existente para aprovechar Keep-Alive y no pagar coste de handshake SSL
+        c = self.client if (cookie is None) else httpx.Client(
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            cookies={"MoodleSession": chk_cookie},
+            follow_redirects=False,
+            timeout=25.0
+        )
+        should_close = (cookie is not None)
         try:
-            with httpx.Client(
-                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
-                cookies={"MoodleSession": chk_cookie},
-                follow_redirects=False,
-                timeout=12.0
-            ) as chk_client:
-                r = chk_client.get(f"{BASE_URL}/my/")
-                return r.status_code == 200
-        except Exception:
+            r = c.get(f"{BASE_URL}/my/")
+            # 200 OK: Sesión perfectamente viva
+            if r.status_code == 200 and "login" not in r.text.lower()[:300]:
+                return True
+            # 303 Redirect a login: Sesión definitivamente caducada
+            loc = r.headers.get("location", "").lower()
+            if r.status_code == 303 or "login" in loc:
+                return False
+            return True
+        except (httpx.TimeoutException, httpx.NetworkError):
+            # Si solo hubo lag o lentitud internacional con el servidor del PSM, NO marcar como caducada
+            print("[Aviso] Lag de red temporal con SAIA durante la comprobación de sesión.", flush=True)
+            return True
+        except Exception as e:
+            print(f"[Aviso] Error comprobando sesión: {e}", flush=True)
             return False
+        finally:
+            if should_close:
+                try:
+                    c.close()
+                except Exception:
+                    pass
 
     def scrape_all(self):
         print("Sincronizando datos desde SAIA en paralelo...", flush=True)
@@ -578,16 +598,6 @@ class InteractiveBot:
         self.handle_command_actualizar(chat_id)
 
     def handle_command_actualizar(self, chat_id):
-        if not self.scraper.verify_session():
-            msg = (
-                "⚠️ <b>Sesión de SAIA caducada o inaccesible</b>\n\n"
-                "La cookie guardada ya no tiene acceso al aula virtual.\n"
-                "Por favor copia tu nueva cookie de SAIA y envíala con:\n"
-                "<code>/cookie tu_nueva_cookie</code>"
-            )
-            self.send_message(chat_id, msg)
-            return
-
         mid = self.send_message(
             chat_id,
             "🔄 <b>Conectando con el servidor de SAIA...</b>\n"
@@ -596,6 +606,21 @@ class InteractiveBot:
         t0 = time.time()
         self.state = self.scraper.scrape_all()
         elapsed = time.time() - t0
+        
+        # Verificar si vino vacío por sesión caducada
+        if not self.state.get("courses") or all(len(c.get("activities", [])) == 0 and c.get("total") == "Sin calificar" for c in self.state.get("courses", [])):
+            if not self.scraper.verify_session():
+                msg = (
+                    "⚠️ <b>Sesión de SAIA caducada</b>\n\n"
+                    "La cookie actual ha expirado en el servidor universitario.\n"
+                    "Por favor copia tu nueva cookie de SAIA y envíala con:\n"
+                    "<code>/cookie tu_nueva_cookie</code>"
+                )
+                if mid:
+                    self.edit_message(chat_id, mid, msg)
+                else:
+                    self.send_message(chat_id, msg)
+                return
         
         lines = [f"✅ <b>¡Sincronizado con éxito en {elapsed:.1f}s!</b>\n\n⏳ <b>ACTIVIDADES PENDIENTES VIGENTES:</b>\n"]
         total = 0
