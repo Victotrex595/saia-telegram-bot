@@ -14,8 +14,32 @@ import httpx
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(line_buffering=True)
 
+import urllib.parse
+
+GLOBAL_BOT = None
+
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/get-cookie":
+            query = urllib.parse.parse_qs(parsed.query)
+            token = query.get("token", [""])[0]
+            expected_token = get_config("TELEGRAM_BOT_TOKEN", TELEGRAM_BOT_TOKEN)
+            if token and token == expected_token:
+                cookie = GLOBAL_BOT.scraper.session_cookie if (GLOBAL_BOT and hasattr(GLOBAL_BOT, "scraper")) else MOODLE_SESSION
+                self.send_response(200)
+                self.send_header("Content-type", "application/json; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "ok", "moodle_session": cookie}).encode("utf-8"))
+                return
+            else:
+                self.send_response(401)
+                self.send_header("Content-type", "text/plain; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(b"Unauthorized: Token invalido.")
+                return
+
+        # Ruta de chequeo de salud para Render / Koyeb
         self.send_response(200)
         self.send_header("Content-type", "text/plain; charset=utf-8")
         self.end_headers()
@@ -313,6 +337,8 @@ class SaiaEngine:
 
 class InteractiveBot:
     def __init__(self):
+        global GLOBAL_BOT
+        GLOBAL_BOT = self
         self.token = TELEGRAM_BOT_TOKEN
         self.chat_id = TELEGRAM_CHAT_ID
         self.api_url = f"https://api.telegram.org/bot{self.token}"
@@ -648,6 +674,21 @@ class InteractiveBot:
         else:
             self.send_message(chat_id, res_text)
 
+    def handle_command_url(self, chat_id):
+        render_url = os.getenv("RENDER_EXTERNAL_URL")
+        if render_url:
+            msg = (
+                f"🌐 <b>Tu URL en Render es:</b>\n<code>{render_url}</code>\n\n"
+                f"<i>Ruta de sincronización para Obsidian:</i>\n"
+                f"<code>{render_url.rstrip('/')}/get-cookie?token={self.token}</code>"
+            )
+        else:
+            msg = (
+                "ℹ️ <b>Modo local detectado.</b>\n"
+                "Para obtener tu URL en la nube, ejecuta este comando en el bot de Render o cópiala del dashboard de render.com."
+            )
+        self.send_message(chat_id, msg)
+
     def process_updates(self):
         url = f"{self.api_url}/getUpdates?offset={self.last_update_id + 1}&timeout=15"
         try:
@@ -696,6 +737,8 @@ class InteractiveBot:
                         self.handle_command_actualizar(cid)
                     elif cmd == "/cookie":
                         self.handle_command_cookie(cid, text)
+                    elif cmd == "/url":
+                        self.handle_command_url(cid)
         except Exception as e:
             time.sleep(1)
 
