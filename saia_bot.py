@@ -25,7 +25,7 @@ def get_env_or_config(key, default=None):
             pass
     return default
 
-MOODLE_SESSION = get_env_or_config("MOODLE_SESSION", "osguaurb5d14p7dqeco4dq4jar")
+MOODLE_SESSION = get_env_or_config("MOODLE_SESSION", "a98fbkev364chb1s4d9qfv0pir")
 TELEGRAM_BOT_TOKEN = get_env_or_config("TELEGRAM_BOT_TOKEN", "8916730385:AAEvY26U3Mkc5vDq2XBgJNXpbJAU6Ej-e4o")
 TELEGRAM_CHAT_ID = get_env_or_config("TELEGRAM_CHAT_ID", "1452296186")
 

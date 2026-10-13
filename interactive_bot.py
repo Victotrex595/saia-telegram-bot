@@ -3,6 +3,7 @@ import re
 import sys
 import time
 import json
+import random
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from concurrent.futures import ThreadPoolExecutor
@@ -39,18 +40,20 @@ STATE_FILE = os.path.join(SCRIPT_DIR, "saia_state.json")
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "config.json")
 
 def get_config(key, default=None):
-    val = os.getenv(key)
-    if val:
-        return val.strip()
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                return json.load(f).get(key.lower(), default)
+                val = json.load(f).get(key.lower())
+                if val:
+                    return str(val).strip()
         except Exception:
             pass
+    val = os.getenv(key)
+    if val:
+        return val.strip()
     return default
 
-MOODLE_SESSION = get_config("MOODLE_SESSION", "osguaurb5d14p7dqeco4dq4jar")
+MOODLE_SESSION = get_config("MOODLE_SESSION", "a98fbkev364chb1s4d9qfv0pir")
 TELEGRAM_BOT_TOKEN = get_config("TELEGRAM_BOT_TOKEN", "8916730385:AAEvY26U3Mkc5vDq2XBgJNXpbJAU6Ej-e4o")
 TELEGRAM_CHAT_ID = str(get_config("TELEGRAM_CHAT_ID", "1452296186"))
 COURSE_IDS = ["27752", "27753", "27604", "27611", "27755", "26639"]
@@ -105,12 +108,37 @@ def format_date_compact(date_str, tiempo_str):
 class SaiaEngine:
     def __init__(self, session_cookie):
         self.session_cookie = session_cookie
+        self._init_client(session_cookie)
+
+    def _init_client(self, cookie):
         self.client = httpx.Client(
             headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
-            cookies={"MoodleSession": session_cookie},
-            follow_redirects=True,
+            cookies={"MoodleSession": cookie},
+            follow_redirects=False,
             timeout=25.0
         )
+
+    def update_cookie(self, new_cookie):
+        self.session_cookie = new_cookie
+        try:
+            self.client.close()
+        except Exception:
+            pass
+        self._init_client(new_cookie)
+
+    def verify_session(self, cookie=None):
+        chk_cookie = cookie or self.session_cookie
+        try:
+            with httpx.Client(
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+                cookies={"MoodleSession": chk_cookie},
+                follow_redirects=False,
+                timeout=12.0
+            ) as chk_client:
+                r = chk_client.get(f"{BASE_URL}/my/")
+                return r.status_code == 200
+        except Exception:
+            return False
 
     def scrape_all(self):
         print("Sincronizando datos desde SAIA en paralelo...", flush=True)
@@ -158,78 +186,86 @@ class SaiaEngine:
                     if cid not in events:
                         events[cid] = []
                     events[cid].append({"title": title, "date": date_str, "link": link})
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error consultando calendario: {e}", flush=True)
         return events
 
     def get_course_grades(self, cid):
         url = f"{BASE_URL}/grade/report/user/index.php?id={cid}"
-        res = self.client.get(url)
-        if res.status_code != 200:
-            return f"Curso {cid}", "Sin calificar", []
-        html = res.text
-        h1_m = re.search(r"class=\"page-header-headings\"[^>]*>.*?<h1>(.*?)</h1>", html, re.S)
-        if not h1_m:
-            h1_m = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.S)
-        cname = clean_text(h1_m.group(1)) if h1_m else f"Curso {cid}"
+        try:
+            res = self.client.get(url)
+            if res.status_code != 200:
+                return f"Curso {cid}", "Sin calificar", []
+            html = res.text
+            h1_m = re.search(r"class=\"page-header-headings\"[^>]*>.*?<h1>(.*?)</h1>", html, re.S)
+            if not h1_m:
+                h1_m = re.search(r"<h1[^>]*>(.*?)</h1>", html, re.S)
+            cname = clean_text(h1_m.group(1)) if h1_m else f"Curso {cid}"
 
-        items = []
-        course_total = "Sin calificar"
-        table_m = re.search(r"<table[^>]*class=\"[^\"]*user-grade[^\"]*\"[^>]*>(.*?)</table>", html, re.S)
-        if table_m:
-            rows = re.findall(r"<tr[^>]*>(.*?)</tr>", table_m.group(1), re.S)
-            for r in rows:
-                r_clean = re.sub(r'<div[^>]*class=\"[^\"]*action-menu[^\"]*\"[^>]*>.*?</div>', '', r, flags=re.S)
-                if "total" in r_clean.lower() and "itemname" in r_clean:
-                    tds = re.findall(r"<td[^>]*>(.*?)</td>", r_clean, re.S)
-                    clean_tds = [clean_text(td) for td in tds]
-                    if len(clean_tds) >= 3:
-                        nota = clean_tds[1] if clean_tds[1] and clean_tds[1] != "-" else "Sin calificar"
-                        rango = clean_tds[2] if clean_tds[2] else ""
-                        course_total = f"{nota} / {rango.split('–')[-1].split('-')[-1].strip()}" if (rango and nota != "Sin calificar") else nota
-                item_m = re.search(r"<th[^>]*class=\"[^\"]*item\b[^\"]*\"[^>]*>(.*?)</th>", r_clean, re.S)
-                if item_m:
-                    item_title = clean_text(item_m.group(1))
-                    for prefix in ['Tarea', 'Cuestionario', 'Foro']:
-                        if item_title.startswith(prefix):
-                            item_title = item_title[len(prefix):].strip()
-                    tds = re.findall(r"<td[^>]*>(.*?)</td>", r_clean, re.S)
-                    clean_tds = [clean_text(td) for td in tds]
-                    pond = clean_tds[0] if len(clean_tds) > 0 else "-"
-                    calif = clean_tds[1] if len(clean_tds) > 1 else "-"
-                    items.append({"title": item_title, "ponderacion": pond, "calificacion": calif})
-        return cname, course_total, items
+            items = []
+            course_total = "Sin calificar"
+            table_m = re.search(r"<table[^>]*class=\"[^\"]*user-grade[^\"]*\"[^>]*>(.*?)</table>", html, re.S)
+            if table_m:
+                rows = re.findall(r"<tr[^>]*>(.*?)</tr>", table_m.group(1), re.S)
+                for r in rows:
+                    r_clean = re.sub(r'<div[^>]*class=\"[^\"]*action-menu[^\"]*\"[^>]*>.*?</div>', '', r, flags=re.S)
+                    if "total" in r_clean.lower() and "itemname" in r_clean:
+                        tds = re.findall(r"<td[^>]*>(.*?)</td>", r_clean, re.S)
+                        clean_tds = [clean_text(td) for td in tds]
+                        if len(clean_tds) >= 3:
+                            nota = clean_tds[1] if clean_tds[1] and clean_tds[1] != "-" else "Sin calificar"
+                            rango = clean_tds[2] if clean_tds[2] else ""
+                            course_total = f"{nota} / {rango.split('–')[-1].split('-')[-1].strip()}" if (rango and nota != "Sin calificar") else nota
+                    item_m = re.search(r"<th[^>]*class=\"[^\"]*item\b[^\"]*\"[^>]*>(.*?)</th>", r_clean, re.S)
+                    if item_m:
+                        item_title = clean_text(item_m.group(1))
+                        for prefix in ['Tarea', 'Cuestionario', 'Foro']:
+                            if item_title.startswith(prefix):
+                                item_title = item_title[len(prefix):].strip()
+                        tds = re.findall(r"<td[^>]*>(.*?)</td>", r_clean, re.S)
+                        clean_tds = [clean_text(td) for td in tds]
+                        pond = clean_tds[0] if len(clean_tds) > 0 else "-"
+                        calif = clean_tds[1] if len(clean_tds) > 1 else "-"
+                        items.append({"title": item_title, "ponderacion": pond, "calificacion": calif})
+            return cname, course_total, items
+        except Exception as e:
+            print(f"Error en notas {cid}: {e}", flush=True)
+            return f"Curso {cid}", "Sin calificar", []
 
     def get_course_activities(self, cid, cal_events):
         url = f"{BASE_URL}/course/view.php?id={cid}"
-        res = self.client.get(url)
-        if res.status_code != 200:
+        try:
+            res = self.client.get(url)
+            if res.status_code != 200:
+                return []
+            matches = re.findall(r'<a[^>]*href=\"(https://saia2\.psm\.edu\.ve/mod/(assign|quiz)/view\.php\?id=\d+)\"[^>]*>(.*?)</a>', res.text, re.S)
+            activities = []
+            seen = set()
+            for link, mod_type, raw_title in matches:
+                if link in seen:
+                    continue
+                seen.add(link)
+                title = clean_text(raw_title)
+                for suffix in ['Tarea', 'Cuestionario']:
+                    if title.endswith(suffix):
+                        title = title[:-len(suffix)].strip()
+                detail = self.check_activity_detail(link, mod_type)
+                matched_date = None
+                for ev in cal_events:
+                    if link in ev.get("link", "") or any(w in ev["title"].lower() for w in title.lower().split()[:3] if len(w) > 3):
+                        matched_date = ev["date"]
+                        break
+                activities.append({
+                    "title": title,
+                    "type": "Tarea" if mod_type == "assign" else "Cuestionario",
+                    "link": link,
+                    "fecha_calendario": matched_date,
+                    **detail
+                })
+            return activities
+        except Exception as e:
+            print(f"Error en actividades {cid}: {e}", flush=True)
             return []
-        matches = re.findall(r'<a[^>]*href=\"(https://saia2\.psm\.edu\.ve/mod/(assign|quiz)/view\.php\?id=\d+)\"[^>]*>(.*?)</a>', res.text, re.S)
-        activities = []
-        seen = set()
-        for link, mod_type, raw_title in matches:
-            if link in seen:
-                continue
-            seen.add(link)
-            title = clean_text(raw_title)
-            for suffix in ['Tarea', 'Cuestionario']:
-                if title.endswith(suffix):
-                    title = title[:-len(suffix)].strip()
-            detail = self.check_activity_detail(link, mod_type)
-            matched_date = None
-            for ev in cal_events:
-                if link in ev.get("link", "") or any(w in ev["title"].lower() for w in title.lower().split()[:3] if len(w) > 3):
-                    matched_date = ev["date"]
-                    break
-            activities.append({
-                "title": title,
-                "type": "Tarea" if mod_type == "assign" else "Cuestionario",
-                "link": link,
-                "fecha_calendario": matched_date,
-                **detail
-            })
-        return activities
 
     def check_activity_detail(self, link, mod_type):
         try:
@@ -269,6 +305,35 @@ class InteractiveBot:
             limits=httpx.Limits(max_keepalive_connections=5, keepalive_expiry=60.0)
         )
         self.load_state()
+        self.start_heartbeat()
+
+    def start_heartbeat(self):
+        def heartbeat_worker():
+            # Pequeña espera inicial de 2 minutos antes del primer latido
+            time.sleep(120)
+            while True:
+                # Intervalo aleatorio (Jitter humano) entre 22 y 38 minutos con segundos impredecibles
+                wait_seconds = random.randint(22 * 60, 38 * 60) + random.randint(5, 55)
+                mins = wait_seconds / 60.0
+                try:
+                    alive = self.scraper.verify_session()
+                    now_str = datetime.now().strftime("%H:%M:%S")
+                    if alive:
+                        print(f"[{now_str}] [Heartbeat] Sesión SAIA activa y refrescada (200 OK). Próximo en ~{mins:.1f} min.", flush=True)
+                    else:
+                        print(f"[{now_str}] [Heartbeat] ALERTA: La sesión SAIA ha caducado.", flush=True)
+                        alert_msg = (
+                            "⚠️ <b>ALERTA SAIA:</b> La sesión ha caducado en la universidad.\n\n"
+                            "Para reactivar el bot al instante, abre SAIA en tu navegador y envíame:\n"
+                            "<code>/cookie tu_nueva_cookie</code>"
+                        )
+                        self.send_message(self.chat_id, alert_msg)
+                except Exception as e:
+                    print(f"[Heartbeat] Error: {e}", flush=True)
+                
+                time.sleep(wait_seconds)
+
+        threading.Thread(target=heartbeat_worker, daemon=True).start()
 
     def load_state(self):
         if os.path.exists(STATE_FILE):
@@ -278,7 +343,11 @@ class InteractiveBot:
                     return
             except Exception:
                 pass
-        self.state = self.scraper.scrape_all()
+        try:
+            self.state = self.scraper.scrape_all()
+        except Exception as e:
+            print(f"Error cargando estado inicial: {e}", flush=True)
+            self.state = {"timestamp": datetime.now().isoformat(), "courses": []}
 
     def send_message(self, chat_id, text, reply_markup=None):
         payload = {
@@ -326,7 +395,8 @@ class InteractiveBot:
             "• 📊 /calificaciones — Ver tus notas acumuladas de todas las materias\n"
             "• ⚠️ /vencidas — Ver tareas que ya expiraron\n"
             "• 📚 /materia — Elegir una materia y ver todos sus detalles\n"
-            "• 🔄 /actualizar — Forzar una consulta a SAIA en tiempo real"
+            "• 🔄 /actualizar — Forzar una consulta a SAIA en tiempo real\n"
+            "• 🔑 /cookie — Renovar la sesión de SAIA en 5 segundos"
         )
         self.send_message(chat_id, msg)
 
@@ -358,19 +428,22 @@ class InteractiveBot:
             cname = escape(c["name"])
             total = c.get("total", "Sin calificar")
             lines.append(f"📘 <b>{cname}</b>")
-            lines.append(f"🎯 <b>Nota Acumulada:</b> <code>{escape(total)}</code>")
+            lines.append(f"🎯 <b>Total Acumulado:</b> <code>{escape(total)}</code>")
             
-            evaluadas = [g for g in c.get("grades", []) if g.get("calificacion") and g["calificacion"] != "-"]
-            if evaluadas:
-                for ev in evaluadas:
-                    lines.append(f"  • {escape(simplify_activity_title(ev['title']))}: <b>{escape(ev['calificacion'])}</b> ({escape(ev.get('ponderacion', '-'))})")
+            calificados = [it for it in c.get("grades", []) if it.get("calificacion") != "-"]
+            if calificados:
+                for it in calificados:
+                    tit = escape(simplify_activity_title(it["title"]))
+                    nota = escape(it["calificacion"])
+                    pond = escape(it.get("ponderacion", "-"))
+                    lines.append(f"  • {tit}: <b>{nota}</b> (Pond: {pond})")
             else:
-                lines.append("  • <i>Aún no hay calificaciones parciales publicadas.</i>")
+                lines.append("  • <i>Sin evaluaciones calificadas aún</i>")
             lines.append("")
         self.send_message(chat_id, "\n".join(lines).strip())
 
     def handle_command_vencidas(self, chat_id):
-        lines = ["⚠️ <b>ACTIVIDADES VENCIDAS O ATRASADAS:</b>\n"]
+        lines = ["⚠️ <b>ACTIVIDADES VENCIDAS (NO ENTREGADAS):</b>\n"]
         total = 0
         for c in self.state.get("courses", []):
             cname = c["name"]
@@ -454,7 +527,67 @@ class InteractiveBot:
         }
         self.edit_message(chat_id, message_id, "\n".join(lines), reply_markup=reply_markup)
 
+    def handle_command_cookie(self, chat_id, text):
+        parts = text.strip().split()
+        if len(parts) < 2:
+            self.send_message(
+                chat_id,
+                "ℹ️ <b>Uso del comando /cookie:</b>\n\n"
+                "Para actualizar la sesión de SAIA en 5 segundos, envía:\n"
+                "<code>/cookie &lt;tu_moodle_session&gt;</code>\n\n"
+                "<i>Ejemplo:</i>\n"
+                "<code>/cookie a98fbkev364chb1s4d9qfv0pir</code>"
+            )
+            return
+
+        new_cookie = parts[1].strip()
+        self.send_message(chat_id, "🔍 <b>Validando cookie con el servidor de SAIA...</b>")
+        
+        if not self.scraper.verify_session(new_cookie):
+            self.send_message(
+                chat_id,
+                "❌ <b>Error:</b> La cookie proporcionada no es válida o ya caducó en SAIA.\n"
+                "Inicia sesión en tu navegador y copia el valor exacto de <code>MoodleSession</code>."
+            )
+            return
+
+        self.scraper.update_cookie(new_cookie)
+        
+        # Guardar en config.json
+        cfg = {}
+        if os.path.exists(CONFIG_FILE):
+            try:
+                with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                    cfg = json.load(f)
+            except Exception:
+                pass
+        cfg["moodle_session"] = new_cookie
+        cfg["telegram_bot_token"] = self.token
+        cfg["telegram_chat_id"] = self.chat_id
+        try:
+            with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+                json.dump(cfg, f, indent=2)
+        except Exception:
+            pass
+
+        self.send_message(
+            chat_id,
+            "✅ <b>¡Sesión de SAIA actualizada con éxito!</b>\n\n"
+            "🔄 Sincronizando datos de las materias..."
+        )
+        self.handle_command_actualizar(chat_id)
+
     def handle_command_actualizar(self, chat_id):
+        if not self.scraper.verify_session():
+            msg = (
+                "⚠️ <b>Sesión de SAIA caducada o inaccesible</b>\n\n"
+                "La cookie guardada ya no tiene acceso al aula virtual.\n"
+                "Por favor copia tu nueva cookie de SAIA y envíala con:\n"
+                "<code>/cookie tu_nueva_cookie</code>"
+            )
+            self.send_message(chat_id, msg)
+            return
+
         mid = self.send_message(
             chat_id,
             "🔄 <b>Conectando con el servidor de SAIA...</b>\n"
@@ -500,7 +633,7 @@ class InteractiveBot:
             for update in data.get("result", []):
                 self.last_update_id = update["update_id"]
                 
-                # Clic en Botón (Callback Query) -> Responder INMEDIATAMENTE
+                # Clic en Botón (Callback Query)
                 if "callback_query" in update:
                     cb = update["callback_query"]
                     cb_id = cb["id"]
@@ -536,13 +669,15 @@ class InteractiveBot:
                         self.handle_command_materia(cid)
                     elif cmd == "/actualizar":
                         self.handle_command_actualizar(cid)
+                    elif cmd == "/cookie":
+                        self.handle_command_cookie(cid, text)
         except Exception as e:
             time.sleep(1)
 
     def run(self):
         print("="*60, flush=True)
         print("  BOT INTERACTIVO ULTRA-RÁPIDO INICIADO", flush=True)
-        print("  Scraping paralelo activo", flush=True)
+        print("  Heartbeat activo cada 20 min | Comando /cookie habilitado", flush=True)
         print("="*60, flush=True)
         
         while True:
