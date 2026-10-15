@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-15T02:29:44.698704",
+  "timestamp": "2026-10-15T16:21:23.004147",
   "courses": [
     {
       "id": "27752",
@@ -19,7 +19,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 4 días 22 horas",
+          "tiempo": "La Tarea está retrasada por: 5 días 12 horas",
           "es_realizada": false,
           "es_atrasada": true
         }
@@ -43,7 +43,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 1 día 4 horas",
+          "tiempo": "La Tarea está retrasada por: 1 día 18 horas",
           "es_realizada": false,
           "es_atrasada": true
         }
@@ -72,7 +72,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
           "fecha_calendario": "sábado, 17 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "3 días 1 hora restante",
+          "tiempo": "2 días 11 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         },
@@ -82,7 +82,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
           "fecha_calendario": "domingo, 25 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "11 días 1 hora restante",
+          "tiempo": "10 días 11 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         }
@@ -111,7 +111,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 4 días 22 horas",
+          "tiempo": "La Tarea está retrasada por: 5 días 12 horas",
           "es_realizada": false,
           "es_atrasada": true
         },
@@ -119,7 +119,7 @@
           "title": "EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)",
           "type": "Cuestionario",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2023058",
-          "fecha_calendario": "viernes, 16 octubre, 00:00",
+          "fecha_calendario": "Mañana, 16 de octubre, 00:00",
           "estado": "Pendiente",
           "tiempo": "//saia2",
           "es_realizada": false,
@@ -153,7 +153,7 @@
           "title": "Taller Grupal 1 (20%)",
           "type": "Cuestionario",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022438",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Pendiente",
           "tiempo": "//saia2",
           "es_realizada": false,
@@ -163,9 +163,9 @@
           "title": "Tarea Grupal 1 (10%)",
           "type": "Tarea",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "7 días 1 hora restante",
+          "tiempo": "6 días 11 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         },
@@ -173,7 +173,7 @@
           "title": "Taller Grupal 2 (20%)",
           "type": "Cuestionario",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022454",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Pendiente",
           "tiempo": "//saia2",
           "es_realizada": false,
@@ -183,9 +183,9 @@
           "title": "Tarea Grupal 2 (10%)",
           "type": "Tarea",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "49 días 1 hora restante",
+          "tiempo": "48 días 11 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         },
@@ -193,7 +193,7 @@
           "title": "Taller grupal 3 (20%)",
           "type": "Cuestionario",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022467",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Pendiente",
           "tiempo": "//saia2",
           "es_realizada": false,
@@ -203,9 +203,9 @@
           "title": "Tarea Grupal 3 (20%)",
           "type": "Tarea",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
-          "fecha_calendario": "Hoy, 14 de octubre, 23:59",
+          "fecha_calendario": "miércoles, 21 octubre, 23:59",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "119 días 1 hora restante",
+          "tiempo": "118 días 11 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         }
