@@ -53,8 +53,7 @@ def simplify_activity_title(title):
 
 def format_date_compact(date_str, tiempo_str):
     if date_str:
-        # Extraer dia, mes y hora
-        m = re.search(r'(\d+)\s+de?\s*([a-zA-Z]{3})[a-zA-Z]*(?:,\s*(\d{2}:\d{2}))?', date_str, re.I)
+        m = re.search(r'(\d+)\s+(?:de\s+)?([a-zA-Z]{3})[a-zA-Z]*(?:[^\d]*\d{4})?(?:[^\d]*(\d{2}:\d{2}))?', date_str, re.I)
         if m:
             dia = m.group(1)
             mes = m.group(2).lower()
@@ -62,7 +61,7 @@ def format_date_compact(date_str, tiempo_str):
             return f"📅 <b>{dia} {mes}{hora}</b>"
         return f"📅 <b>{date_str}</b>"
         
-    if tiempo_str and tiempo_str != "-":
+    if tiempo_str and tiempo_str != "-" and not tiempo_str.startswith("//"):
         m = re.search(r'(\d+\s*d[ií]as?(?:\s*\d+\s*horas?)?)', tiempo_str)
         if m:
             return f"⏱️ En {m.group(1)}"
@@ -204,17 +203,41 @@ class SaiaScraper:
 
             detail = self.check_activity_detail(link, mod_type)
             
+            # Extraer ID numérico de módulo de la actividad (ej: 2022447)
+            act_id_m = re.search(r'[?&]id=(\d+)', link)
+            act_id = act_id_m.group(1) if act_id_m else ""
+
             matched_date = None
             for ev in cal_events:
-                if link in ev.get("link", "") or any(w in ev["title"].lower() for w in title.lower().split()[:3] if len(w) > 3):
+                ev_link = ev.get("link", "")
+                ev_id_m = re.search(r'[?&]id=(\d+)', ev_link)
+                ev_id = ev_id_m.group(1) if ev_id_m else ""
+                
+                # 1. Coincidencia EXACTA por ID de módulo en el enlace
+                if act_id and ev_id and act_id == ev_id:
                     matched_date = ev["date"]
                     break
+                
+                # 2. Coincidencia por URL completa
+                if link and ev_link and link == ev_link:
+                    matched_date = ev["date"]
+                    break
+
+                # 3. Coincidencia estricta por título NORMALIZADO (evita replicación por palabras comunes)
+                clean_act = re.sub(r'[^a-z0-9]', '', simplify_activity_title(title).lower())
+                clean_ev = re.sub(r'[^a-z0-9]', '', simplify_activity_title(ev.get("title", "")).lower())
+                if clean_act and clean_ev and (clean_act == clean_ev or clean_act in clean_ev):
+                    matched_date = ev["date"]
+                    break
+
+            # Preferir la fecha obtenida directamente de la actividad; de lo contrario, la del calendario
+            fecha_final = detail.get("fecha_entrega") or matched_date
 
             activities.append({
                 "title": title,
                 "type": "Tarea" if mod_type == "assign" else "Cuestionario",
                 "link": link,
-                "fecha_calendario": matched_date,
+                "fecha_calendario": fecha_final,
                 **detail
             })
         return activities
@@ -223,27 +246,84 @@ class SaiaScraper:
         try:
             res = self.client.get(link)
             if res.status_code != 200:
-                return {"estado": "Sin datos", "tiempo": "-", "es_realizada": False, "es_atrasada": False}
+                return {"estado": "Sin datos", "tiempo": "-", "fecha_entrega": None, "es_realizada": False, "es_atrasada": False}
             html = res.text
+            
             if mod_type == "assign":
-                entrega_m = re.search(r'<th[^>]*>Estado de la entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
-                calif_m = re.search(r'<th[^>]*>Estado de la calificaci[^\"]*</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
-                tiempo_m = re.search(r'<th[^>]*>Tiempo restante</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
+                entrega_m = re.search(r'<th[^>]*>Estado de la entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                calif_m = re.search(r'<th[^>]*>Estado de la calificaci[^\"]*</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                tiempo_m = re.search(r'<th[^>]*>Tiempo restante</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                fecha_m = re.search(r'<th[^>]*>Fecha de entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
 
                 estado = clean_text(entrega_m.group(1)) if entrega_m else "Sin envíos"
                 calif_est = clean_text(calif_m.group(1)) if calif_m else "-"
                 tiempo = clean_text(tiempo_m.group(1)) if tiempo_m else "-"
+                fecha_entrega = clean_text(fecha_m.group(1)) if fecha_m else None
+                
+                if not fecha_entrega:
+                    f_alt = re.search(r'(?:Fecha de entrega|Cierre)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                    if f_alt:
+                        fecha_entrega = clean_text(f_alt.group(1))
 
                 es_realizada = any(x in estado.lower() for x in ["enviado para calificar", "entregado"]) or "calificado" in calif_est.lower()
                 es_atrasada = "retrasada" in tiempo.lower() or "overdue" in tiempo.lower()
-                return {"estado": estado, "tiempo": tiempo, "es_realizada": es_realizada, "es_atrasada": es_atrasada}
+                return {
+                    "estado": estado,
+                    "tiempo": tiempo,
+                    "fecha_entrega": fecha_entrega,
+                    "es_realizada": es_realizada,
+                    "es_atrasada": es_atrasada
+                }
             else:
-                es_realizada = "reintentar el cuestionario" in html.lower() or "resumen de sus intentos anteriores" in html.lower()
-                cierre_m = re.search(r'cerrar[^\.]*?:\s*([^\.<]+)', html, re.I)
-                tiempo = clean_text(cierre_m.group(1)) if cierre_m else "-"
-                return {"estado": "Realizado" if es_realizada else "Pendiente", "tiempo": tiempo, "es_realizada": es_realizada, "es_atrasada": False}
+                html_lower = html.lower()
+                es_realizada = (
+                    "reintentar el cuestionario" in html_lower
+                    or "resumen de sus intentos anteriores" in html_lower
+                    or "calificación más alta" in html_lower
+                    or ("revisión" in html_lower and "finalizado" in html_lower)
+                )
+
+                fecha_cierre = None
+                es_atrasada = False
+
+                # 1. Comprobar si ya cerró ("Cerró:", "se cerró el", "cerrado el")
+                cierre_pasado_m = re.search(r'(?:Cerró|se cerró el|cerrado el)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                if not cierre_pasado_m:
+                    cierre_pasado_m = re.search(r'Este cuestionario se cerr[oó] el\s*([^<\.]+)', html, re.I)
+
+                if cierre_pasado_m:
+                    fecha_cierre = clean_text(cierre_pasado_m.group(1))
+                    if not es_realizada:
+                        es_atrasada = True
+                    tiempo = f"Cerró: {fecha_cierre}"
+                else:
+                    # 2. Comprobar si cerrará en el futuro ("Cierra:", "se cerrará el", "Cierre:")
+                    cierre_futuro_m = re.search(r'(?:Cierra|se cerrar[aá] el|Cierre)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                    if not cierre_futuro_m:
+                        cierre_futuro_m = re.search(r'Este cuestionario se cerrar[aá] el\s*([^<\.]+)', html, re.I)
+
+                    if cierre_futuro_m:
+                        fecha_cierre = clean_text(cierre_futuro_m.group(1))
+                        es_atrasada = False
+                        tiempo = f"Cierra: {fecha_cierre}"
+                    else:
+                        if "este cuestionario está cerrado" in html_lower or "cuestionario cerrado" in html_lower:
+                            if not es_realizada:
+                                es_atrasada = True
+                            tiempo = "Cuestionario cerrado"
+                        else:
+                            tiempo = "-"
+
+                estado = "Realizado" if es_realizada else ("Vencido" if es_atrasada else "Pendiente")
+                return {
+                    "estado": estado,
+                    "tiempo": tiempo,
+                    "fecha_entrega": fecha_cierre,
+                    "es_realizada": es_realizada,
+                    "es_atrasada": es_atrasada
+                }
         except Exception:
-            return {"estado": "Error", "tiempo": "-", "es_realizada": False, "es_atrasada": False}
+            return {"estado": "Error", "tiempo": "-", "fecha_entrega": None, "es_realizada": False, "es_atrasada": False}
 
 def detect_changes(old_state, current_state):
     alerts = []

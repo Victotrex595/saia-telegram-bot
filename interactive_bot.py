@@ -115,19 +115,108 @@ def simplify_activity_title(title):
 
 def format_date_compact(date_str, tiempo_str):
     if date_str:
-        m = re.search(r'(\d+)\s+de?\s*([a-zA-Z]{3})[a-zA-Z]*(?:,\s*(\d{2}:\d{2}))?', date_str, re.I)
+        m = re.search(r'(\d+)\s+(?:de\s+)?([a-zA-Z]{3})[a-zA-Z]*(?:[^\d]*\d{4})?(?:[^\d]*(\d{2}:\d{2}))?', date_str, re.I)
         if m:
             dia = m.group(1)
             mes = m.group(2).lower()
             hora = f", {m.group(3)}" if m.group(3) else ""
             return f"📅 <b>{dia} {mes}{hora}</b>"
         return f"📅 <b>{date_str}</b>"
-    if tiempo_str and tiempo_str != "-":
+    if tiempo_str and tiempo_str != "-" and not tiempo_str.startswith("//"):
         m = re.search(r'(\d+\s*d[ií]as?(?:\s*\d+\s*horas?)?)', tiempo_str)
         if m:
             return f"⏱️ En {m.group(1)}"
         return f"⏱️ {tiempo_str}"
     return "📅 Sin fecha"
+
+def detect_changes(old_state, current_state):
+    alerts = []
+    if not old_state or not old_state.get("courses"):
+        return ["✨ <b>Inicio del sistema:</b> Primer registro guardado."]
+
+    old_courses = {c["id"]: c for c in old_state.get("courses", [])}
+    
+    for cur in current_state.get("courses", []):
+        cid = cur["id"]
+        cname = cur["name"]
+        
+        if cid not in old_courses:
+            alerts.append(f"📚 Nueva materia registrada: <b>{escape(cname)}</b>")
+            continue
+            
+        old = old_courses[cid]
+        
+        if cur.get("total") != old.get("total") and cur.get("total") != "Sin calificar":
+            alerts.append(f"🎯 <b>Nota final en {escape(cname)}:</b> <code>{escape(str(cur.get('total')))}</code>")
+            
+        old_grades = {g["title"]: g["calificacion"] for g in old.get("grades", [])}
+        for g in cur.get("grades", []):
+            g_title = g["title"]
+            g_nota = g["calificacion"]
+            if g_title in old_grades:
+                if g_nota != "-" and g_nota != old_grades[g_title]:
+                    alerts.append(f"📝 <b>Nueva nota en {escape(cname)}:</b> {escape(simplify_activity_title(g_title))}: <code>{escape(g_nota)}</code>")
+            elif g_nota != "-":
+                alerts.append(f"📝 <b>Nueva nota en {escape(cname)}:</b> {escape(simplify_activity_title(g_title))}: <code>{escape(g_nota)}</code>")
+                
+        old_acts = {a["link"]: a for a in old.get("activities", [])}
+        for a in cur.get("activities", []):
+            alink = a["link"]
+            if alink not in old_acts:
+                alerts.append(f"🆕 <b>Nueva tarea en {escape(cname)}:</b> {escape(simplify_activity_title(a['title']))}")
+            else:
+                if not old_acts[alink].get("es_realizada") and a.get("es_realizada"):
+                    alerts.append(f"✅ <b>Entregada en {escape(cname)}:</b> {escape(simplify_activity_title(a['title']))}")
+
+    return alerts
+
+def format_telegram_message_clean(current_state, alerts):
+    tz_vzla = timezone(timedelta(hours=-4))
+    ahora = datetime.now(tz_vzla).strftime("%d/%m · %I:%M %p")
+
+    lines = []
+    lines.append(f"🎓 <b>SAIA · {ahora}</b>")
+
+    # Alertas o Sin Cambios
+    if alerts and not any("Primer registro" in a for a in alerts):
+        lines.append("\n🚨 <b>NOVEDADES:</b>")
+        for al in alerts:
+            lines.append(f"• {al}")
+    else:
+        lines.append("ℹ️ <i>Sin cambios nuevos en SAIA.</i>")
+
+    lines.append("\n⏳ <b>ACTIVIDADES PENDIENTES:</b>\n")
+    
+    total_pendientes_activas = 0
+    
+    for c in current_state.get("courses", []):
+        cname = c["name"]
+        # Filtrar: SOLO actividades NO realizadas y NO vencidas/atrasadas
+        pendientes_activas = [
+            a for a in c.get("activities", [])
+            if not a.get("es_realizada") and not a.get("es_atrasada")
+        ]
+        
+        if not pendientes_activas:
+            continue
+            
+        total_pendientes_activas += len(pendientes_activas)
+        lines.append(f"📚 <b>{escape(cname)}</b>")
+        
+        for p in pendientes_activas:
+            titulo_limpio = escape(simplify_activity_title(p["title"]))
+            link = p["link"]
+            fecha_str = format_date_compact(p.get("fecha_calendario"), p.get("tiempo"))
+            
+            lines.append(f"• <a href=\"{link}\">{titulo_limpio}</a> — {fecha_str}")
+        lines.append("")
+
+    if total_pendientes_activas == 0:
+        lines.append("🎉 <b>¡No tienes actividades pendientes por entregar!</b>")
+    else:
+        lines.append(f"📊 <b>Total por entregar:</b> {total_pendientes_activas}")
+
+    return "\n".join(lines).strip()
 
 class SaiaEngine:
     def __init__(self, session_cookie):
@@ -294,16 +383,42 @@ class SaiaEngine:
                     if title.endswith(suffix):
                         title = title[:-len(suffix)].strip()
                 detail = self.check_activity_detail(link, mod_type)
+                
+                # Extraer ID numérico de módulo de la actividad (ej: 2022447)
+                act_id_m = re.search(r'[?&]id=(\d+)', link)
+                act_id = act_id_m.group(1) if act_id_m else ""
+
                 matched_date = None
                 for ev in cal_events:
-                    if link in ev.get("link", "") or any(w in ev["title"].lower() for w in title.lower().split()[:3] if len(w) > 3):
+                    ev_link = ev.get("link", "")
+                    ev_id_m = re.search(r'[?&]id=(\d+)', ev_link)
+                    ev_id = ev_id_m.group(1) if ev_id_m else ""
+                    
+                    # 1. Coincidencia EXACTA por ID de módulo en el enlace
+                    if act_id and ev_id and act_id == ev_id:
                         matched_date = ev["date"]
                         break
+                    
+                    # 2. Coincidencia por URL completa
+                    if link and ev_link and link == ev_link:
+                        matched_date = ev["date"]
+                        break
+
+                    # 3. Coincidencia estricta por título NORMALIZADO (evita replicación por palabras comunes)
+                    clean_act = re.sub(r'[^a-z0-9]', '', simplify_activity_title(title).lower())
+                    clean_ev = re.sub(r'[^a-z0-9]', '', simplify_activity_title(ev.get("title", "")).lower())
+                    if clean_act and clean_ev and (clean_act == clean_ev or clean_act in clean_ev):
+                        matched_date = ev["date"]
+                        break
+
+                # Preferir la fecha obtenida directamente de la actividad; de lo contrario, la del calendario
+                fecha_final = detail.get("fecha_entrega") or matched_date
+
                 activities.append({
                     "title": title,
                     "type": "Tarea" if mod_type == "assign" else "Cuestionario",
                     "link": link,
-                    "fecha_calendario": matched_date,
+                    "fecha_calendario": fecha_final,
                     **detail
                 })
             return activities
@@ -315,25 +430,85 @@ class SaiaEngine:
         try:
             res = self.client.get(link)
             if res.status_code != 200:
-                return {"estado": "Sin datos", "tiempo": "-", "es_realizada": False, "es_atrasada": False}
+                return {"estado": "Sin datos", "tiempo": "-", "fecha_entrega": None, "es_realizada": False, "es_atrasada": False}
             html = res.text
+            
             if mod_type == "assign":
-                entrega_m = re.search(r'<th[^>]*>Estado de la entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
-                calif_m = re.search(r'<th[^>]*>Estado de la calificaci[^\"]*</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
-                tiempo_m = re.search(r'<th[^>]*>Tiempo restante</th>\s*<td[^>]*>(.*?)</td>', html, re.S)
+                entrega_m = re.search(r'<th[^>]*>Estado de la entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                calif_m = re.search(r'<th[^>]*>Estado de la calificaci[^\"]*</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                tiempo_m = re.search(r'<th[^>]*>Tiempo restante</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                fecha_m = re.search(r'<th[^>]*>Fecha de entrega</th>\s*<td[^>]*>(.*?)</td>', html, re.S | re.I)
+                
                 estado = clean_text(entrega_m.group(1)) if entrega_m else "Sin envíos"
                 calif_est = clean_text(calif_m.group(1)) if calif_m else "-"
                 tiempo = clean_text(tiempo_m.group(1)) if tiempo_m else "-"
+                fecha_entrega = clean_text(fecha_m.group(1)) if fecha_m else None
+                
+                if not fecha_entrega:
+                    f_alt = re.search(r'(?:Fecha de entrega|Cierre)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                    if f_alt:
+                        fecha_entrega = clean_text(f_alt.group(1))
+
                 es_realizada = any(x in estado.lower() for x in ["enviado para calificar", "entregado"]) or "calificado" in calif_est.lower()
                 es_atrasada = "retrasada" in tiempo.lower() or "overdue" in tiempo.lower()
-                return {"estado": estado, "tiempo": tiempo, "es_realizada": es_realizada, "es_atrasada": es_atrasada}
+                return {
+                    "estado": estado,
+                    "tiempo": tiempo,
+                    "fecha_entrega": fecha_entrega,
+                    "es_realizada": es_realizada,
+                    "es_atrasada": es_atrasada
+                }
             else:
-                es_realizada = "reintentar el cuestionario" in html.lower() or "resumen de sus intentos anteriores" in html.lower()
-                cierre_m = re.search(r'cerrar[^\.]*?:\s*([^\.<]+)', html, re.I)
-                tiempo = clean_text(cierre_m.group(1)) if cierre_m else "-"
-                return {"estado": "Realizado" if es_realizada else "Pendiente", "tiempo": tiempo, "es_realizada": es_realizada, "es_atrasada": False}
+                # Cuestionario (quiz)
+                html_lower = html.lower()
+                es_realizada = (
+                    "reintentar el cuestionario" in html_lower
+                    or "resumen de sus intentos anteriores" in html_lower
+                    or "calificación más alta" in html_lower
+                    or ("revisión" in html_lower and "finalizado" in html_lower)
+                )
+
+                fecha_cierre = None
+                es_atrasada = False
+
+                # 1. Comprobar si ya cerró ("Cerró:", "se cerró el", "cerrado el")
+                cierre_pasado_m = re.search(r'(?:Cerró|se cerró el|cerrado el)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                if not cierre_pasado_m:
+                    cierre_pasado_m = re.search(r'Este cuestionario se cerr[oó] el\s*([^<\.]+)', html, re.I)
+
+                if cierre_pasado_m:
+                    fecha_cierre = clean_text(cierre_pasado_m.group(1))
+                    if not es_realizada:
+                        es_atrasada = True
+                    tiempo = f"Cerró: {fecha_cierre}"
+                else:
+                    # 2. Comprobar si cerrará en el futuro ("Cierra:", "se cerrará el", "Cierre:")
+                    cierre_futuro_m = re.search(r'(?:Cierra|se cerrar[aá] el|Cierre)[^\.\n<]*?:\s*([^\n<]+)', html, re.I)
+                    if not cierre_futuro_m:
+                        cierre_futuro_m = re.search(r'Este cuestionario se cerrar[aá] el\s*([^<\.]+)', html, re.I)
+
+                    if cierre_futuro_m:
+                        fecha_cierre = clean_text(cierre_futuro_m.group(1))
+                        es_atrasada = False
+                        tiempo = f"Cierra: {fecha_cierre}"
+                    else:
+                        if "este cuestionario está cerrado" in html_lower or "cuestionario cerrado" in html_lower:
+                            if not es_realizada:
+                                es_atrasada = True
+                            tiempo = "Cuestionario cerrado"
+                        else:
+                            tiempo = "-"
+
+                estado = "Realizado" if es_realizada else ("Vencido" if es_atrasada else "Pendiente")
+                return {
+                    "estado": estado,
+                    "tiempo": tiempo,
+                    "fecha_entrega": fecha_cierre,
+                    "es_realizada": es_realizada,
+                    "es_atrasada": es_atrasada
+                }
         except Exception:
-            return {"estado": "Error", "tiempo": "-", "es_realizada": False, "es_atrasada": False}
+            return {"estado": "Error", "tiempo": "-", "fecha_entrega": None, "es_realizada": False, "es_atrasada": False}
 
 class InteractiveBot:
     def __init__(self):
@@ -351,7 +526,78 @@ class InteractiveBot:
             limits=httpx.Limits(max_keepalive_connections=5, keepalive_expiry=60.0)
         )
         self.load_state()
+        self.setup_telegram_commands()
         self.start_heartbeat()
+        self.start_daily_scheduler()
+
+    def setup_telegram_commands(self):
+        url = f"{self.api_url}/setMyCommands"
+        commands = [
+            {"command": "reporte", "description": "📊 Reporte diario y resumen de materias"},
+            {"command": "pendientes", "description": "⏳ Ver actividades pendientes por entregar"},
+            {"command": "calificaciones", "description": "📈 Ver libreta de calificaciones"},
+            {"command": "materia", "description": "📚 Elegir una materia y ver detalles"},
+            {"command": "vencidas", "description": "⚠️ Ver actividades vencidas"},
+            {"command": "actualizar", "description": "🔄 Sincronizar SAIA en tiempo real"},
+            {"command": "cookie", "description": "🔑 Cambiar / renovar cookie de SAIA"},
+            {"command": "url", "description": "🌐 Ver URL en la nube y para Obsidian"},
+            {"command": "help", "description": "ℹ️ Ayuda e instrucciones"}
+        ]
+        try:
+            r = self.tg_client.post(url, json={"commands": commands})
+            if r.status_code == 200:
+                print("[Telegram] Menú de comandos y sugerencias registrado con éxito.", flush=True)
+            else:
+                print(f"[Telegram] Error registrando comandos: {r.status_code}", flush=True)
+        except Exception as e:
+            print(f"[Telegram] Error al registrar comandos: {e}", flush=True)
+
+    def send_daily_report(self):
+        print("[Scheduler] Generando reporte diario programado...", flush=True)
+        try:
+            old_state = dict(self.state) if self.state else {}
+            new_state = self.scraper.scrape_all()
+            self.state = new_state
+            
+            # Verificar si expiró la sesión
+            if not self.state.get("courses") or all(len(c.get("activities", [])) == 0 and c.get("total") == "Sin calificar" for c in self.state.get("courses", [])):
+                if not self.scraper.verify_session():
+                    alert_msg = (
+                        "⚠️ <b>ALERTA SAIA:</b> La sesión ha caducado en la universidad.\n\n"
+                        "No se pudo enviar el reporte automático completo.\n"
+                        "Para reactivar el bot al instante, abre SAIA en tu navegador y envíame:\n"
+                        "<code>/cookie tu_nueva_cookie</code>"
+                    )
+                    self.send_message(self.chat_id, alert_msg)
+                    return
+
+            alerts = detect_changes(old_state, new_state)
+            msg = format_telegram_message_clean(new_state, alerts)
+            self.send_message(self.chat_id, msg)
+            print("[Scheduler] Reporte diario enviado a Telegram exitosamente.", flush=True)
+        except Exception as e:
+            print(f"[Scheduler] Error al enviar reporte diario: {e}", flush=True)
+
+    def start_daily_scheduler(self):
+        def scheduler_worker():
+            tz_vzla = timezone(timedelta(hours=-4))
+            last_sent_slot = None
+            print("[Scheduler] Programador diario activo (8:00 AM y 8:00 PM hora Venezuela VET).", flush=True)
+            while True:
+                try:
+                    now = datetime.now(tz_vzla)
+                    # 8:00 AM (08:00) y 8:00 PM (20:00) hora de Venezuela
+                    if now.hour in (8, 20) and now.minute == 0:
+                        slot_key = f"{now.strftime('%Y-%m-%d')}_{now.hour}"
+                        if slot_key != last_sent_slot:
+                            last_sent_slot = slot_key
+                            print(f"[{now.strftime('%H:%M:%S')}] [Scheduler] Disparando reporte diario programado ({slot_key})...", flush=True)
+                            self.send_daily_report()
+                except Exception as e:
+                    print(f"[Scheduler] Excepción en ciclo de reloj: {e}", flush=True)
+                time.sleep(20)
+
+        threading.Thread(target=scheduler_worker, daemon=True).start()
 
     def start_heartbeat(self):
         def heartbeat_worker():
@@ -396,21 +642,38 @@ class InteractiveBot:
             self.state = {"timestamp": datetime.now().isoformat(), "courses": []}
 
     def send_message(self, chat_id, text, reply_markup=None):
-        payload = {
-            "chat_id": chat_id,
-            "text": text,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True
-        }
-        if reply_markup:
-            payload["reply_markup"] = reply_markup
-        try:
-            res = self.tg_client.post(f"{self.api_url}/sendMessage", json=payload)
-            if res.status_code == 200:
-                return res.json().get("result", {}).get("message_id")
-        except Exception as e:
-            print(f"Error enviando mensaje: {e}", flush=True)
-        return None
+        chunks = []
+        if len(text) <= 4000:
+            chunks.append(text)
+        else:
+            parts = text.split("\n\n")
+            current_chunk = ""
+            for p in parts:
+                if len(current_chunk) + len(p) + 2 > 3800:
+                    chunks.append(current_chunk)
+                    current_chunk = p
+                else:
+                    current_chunk = (current_chunk + "\n\n" + p).strip()
+            if current_chunk:
+                chunks.append(current_chunk)
+
+        last_id = None
+        for i, ch in enumerate(chunks):
+            payload = {
+                "chat_id": chat_id,
+                "text": ch,
+                "parse_mode": "HTML",
+                "disable_web_page_preview": True
+            }
+            if reply_markup and i == len(chunks) - 1:
+                payload["reply_markup"] = reply_markup
+            try:
+                res = self.tg_client.post(f"{self.api_url}/sendMessage", json=payload)
+                if res.status_code == 200:
+                    last_id = res.json().get("result", {}).get("message_id")
+            except Exception as e:
+                print(f"Error enviando mensaje: {e}", flush=True)
+        return last_id
 
     def edit_message(self, chat_id, message_id, text, reply_markup=None):
         payload = {
@@ -437,14 +700,54 @@ class InteractiveBot:
         msg = (
             "👋 <b>¡Hola! Soy tu asistente de SAIA - PSM.</b>\n\n"
             "Puedes usar los siguientes comandos o el botón de <b>Menú</b>:\n\n"
+            "• 📋 /reporte — Reporte general del día con cambios y pendientes\n"
             "• ⏳ /pendientes — Ver actividades vigentes por entregar\n"
             "• 📊 /calificaciones — Ver tus notas acumuladas de todas las materias\n"
             "• ⚠️ /vencidas — Ver tareas que ya expiraron\n"
             "• 📚 /materia — Elegir una materia y ver todos sus detalles\n"
             "• 🔄 /actualizar — Forzar una consulta a SAIA en tiempo real\n"
-            "• 🔑 /cookie — Renovar la sesión de SAIA en 5 segundos"
+            "• 🔑 /cookie — Renovar la sesión de SAIA en 5 segundos\n"
+            "• 🌐 /url — Ver tu URL en la nube y enlace para Obsidian"
         )
         self.send_message(chat_id, msg)
+
+    def handle_command_reporte(self, chat_id):
+        mid = self.send_message(
+            chat_id,
+            "📊 <b>Generando reporte diario con detección de novedades...</b>\n"
+            "<i>Consultando SAIA en tiempo real...</i>"
+        )
+        try:
+            old_state = dict(self.state) if self.state else {}
+            new_state = self.scraper.scrape_all()
+            self.state = new_state
+            
+            if not self.state.get("courses") or all(len(c.get("activities", [])) == 0 and c.get("total") == "Sin calificar" for c in self.state.get("courses", [])):
+                if not self.scraper.verify_session():
+                    msg = (
+                        "⚠️ <b>Sesión de SAIA caducada</b>\n\n"
+                        "La cookie actual ha expirado en el servidor universitario.\n"
+                        "Por favor copia tu nueva cookie de SAIA y envíala con:\n"
+                        "<code>/cookie tu_nueva_cookie</code>"
+                    )
+                    if mid:
+                        self.edit_message(chat_id, mid, msg)
+                    else:
+                        self.send_message(chat_id, msg)
+                    return
+
+            alerts = detect_changes(old_state, new_state)
+            msg = format_telegram_message_clean(new_state, alerts)
+            if mid:
+                self.edit_message(chat_id, mid, msg)
+            else:
+                self.send_message(chat_id, msg)
+        except Exception as e:
+            err = f"❌ Error generando reporte: {e}"
+            if mid:
+                self.edit_message(chat_id, mid, err)
+            else:
+                self.send_message(chat_id, err)
 
     def handle_command_pendientes(self, chat_id):
         lines = ["⏳ <b>ACTIVIDADES PENDIENTES VIGENTES:</b>\n"]
@@ -576,14 +879,22 @@ class InteractiveBot:
     def handle_command_cookie(self, chat_id, text):
         parts = text.strip().split()
         if len(parts) < 2:
-            self.send_message(
-                chat_id,
-                "ℹ️ <b>Uso del comando /cookie:</b>\n\n"
-                "Para actualizar la sesión de SAIA en 5 segundos, envía:\n"
-                "<code>/cookie &lt;tu_moodle_session&gt;</code>\n\n"
+            msg = (
+                "🔑 <b>Renovación de sesión de SAIA</b>\n\n"
+                "💡 <b>Sugerencia rápida:</b>\n"
+                "Toca el siguiente comando para copiarlo a tu portapapeles y pega tu cookie al final:\n\n"
+                "<code>/cookie </code>\n\n"
                 "<i>Ejemplo:</i>\n"
-                "<code>/cookie a98fbkev364chb1s4d9qfv0pir</code>"
+                "<code>/cookie 8aumev6pno5o099bk1v6bpfruf</code>\n\n"
+                "━━━━━━━━━━━━━━━━━━━━\n"
+                "📌 <b>¿Cómo obtener tu cookie en 15 segundos?</b>\n"
+                "1. Abre <b>saia2.psm.edu.ve</b> e inicia sesión en tu navegador.\n"
+                "2. Presiona <b>F12</b> (o Inspeccionar) ➔ Pestaña <b>Aplicación</b> (o <i>Almacenamiento</i>).\n"
+                "3. En el menú izquierdo ve a <b>Cookies</b> ➔ <code>https://saia2.psm.edu.ve</code>.\n"
+                "4. Copia el valor de <b>MoodleSession</b> (26 letras/números).\n\n"
+                "✨ <i>Atajo: También puedes simplemente pegar la clave aquí directamente en el chat y la detectaré automáticamente.</i>"
             )
+            self.send_message(chat_id, msg)
             return
 
         new_cookie = parts[1].strip()
@@ -735,10 +1046,15 @@ class InteractiveBot:
                         self.handle_command_materia(cid)
                     elif cmd == "/actualizar":
                         self.handle_command_actualizar(cid)
+                    elif cmd == "/reporte":
+                        self.handle_command_reporte(cid)
                     elif cmd == "/cookie":
                         self.handle_command_cookie(cid, text)
                     elif cmd == "/url":
                         self.handle_command_url(cid)
+                    elif re.fullmatch(r'[a-z0-9]{20,35}', text):
+                        self.send_message(cid, "🔍 <i>Detecté una cookie de SAIA. Validando tu nueva sesión...</i>")
+                        self.handle_command_cookie(cid, f"/cookie {text}")
         except Exception as e:
             time.sleep(1)
 
