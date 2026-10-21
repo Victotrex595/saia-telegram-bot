@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-20T16:23:28.022670",
+  "timestamp": "2026-10-21T02:38:08.941494",
   "courses": [
     {
       "id": "27752",
@@ -19,7 +19,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 10 días 12 horas",
+          "tiempo": "La Tarea está retrasada por: 10 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -44,7 +44,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 6 días 18 horas",
+          "tiempo": "La Tarea está retrasada por: 7 días 4 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -54,16 +54,16 @@
     {
       "id": "27604",
       "name": "METODOLOGIA DE LA INVESTIGACION II",
-      "total": "Sin calificar",
+      "total": "1,00 / 20",
       "grades": [
         {
           "title": "INFORME INVESTIGATIVO 10%",
-          "ponderacion": "-",
-          "calificacion": "-"
+          "ponderacion": "100,00 %",
+          "calificacion": "1,00"
         },
         {
           "title": "VIDEO EXPOSITIVO 20%",
-          "ponderacion": "-",
+          "ponderacion": "0,00 % ( Vacío )",
           "calificacion": "-"
         }
       ],
@@ -74,9 +74,9 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 2 días 12 horas",
+          "tiempo": "La Tarea está retrasada por: 2 días 22 horas",
           "fecha_entrega": null,
-          "es_realizada": false,
+          "es_realizada": true,
           "es_atrasada": true
         },
         {
@@ -85,7 +85,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
           "fecha_calendario": "domingo, 25 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "5 días 11 horas restante",
+          "tiempo": "5 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -115,7 +115,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 10 días 12 horas",
+          "tiempo": "La Tarea está retrasada por: 10 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -172,7 +172,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447",
           "fecha_calendario": "Mañana, 21 de octubre, 23:59",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "1 día 11 horas restante",
+          "tiempo": "1 día 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -194,7 +194,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "43 días 11 horas restante",
+          "tiempo": "43 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -216,7 +216,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "113 días 11 horas restante",
+          "tiempo": "113 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
