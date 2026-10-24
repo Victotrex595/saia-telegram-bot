@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-23T02:40:41.071430",
+  "timestamp": "2026-10-24T02:38:10.989809",
   "courses": [
     {
       "id": "27752",
@@ -19,7 +19,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 12 días 22 horas",
+          "tiempo": "La Tarea está retrasada por: 13 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -33,12 +33,12 @@
       "grades": [
         {
           "title": "ACTIVIDAD # 1 (10%)",
-          "ponderacion": "-",
+          "ponderacion": "0,00 % ( Vacío )",
           "calificacion": "-"
         },
         {
           "title": "ACTIVIDAD #2 (20%)",
-          "ponderacion": "-",
+          "ponderacion": "0,00 % ( Vacío )",
           "calificacion": "-"
         }
       ],
@@ -49,7 +49,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 9 días 4 horas",
+          "tiempo": "La Tarea está retrasada por: 10 días 4 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -58,11 +58,11 @@
           "title": "ACTIVIDAD #2 (20%)",
           "type": "Tarea",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2052882",
-          "fecha_calendario": "Mañana, 23 de octubre, 12:00",
-          "estado": "Todavía no se han realizado envíos",
-          "tiempo": "13 horas 19 minutos restante",
+          "fecha_calendario": "Hoy, 23 de octubre, 23:00",
+          "estado": "Enviado para calificar",
+          "tiempo": "La tarea fue enviada 22 minutos 32 segundos antes de la fecha límite",
           "fecha_entrega": null,
-          "es_realizada": false,
+          "es_realizada": true,
           "es_atrasada": false
         }
       ]
@@ -90,7 +90,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 4 días 22 horas",
+          "tiempo": "La Tarea está retrasada por: 5 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -101,7 +101,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
           "fecha_calendario": "domingo, 25 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "3 días 1 hora restante",
+          "tiempo": "2 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -131,7 +131,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 12 días 22 horas",
+          "tiempo": "La Tarea está retrasada por: 13 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -215,7 +215,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "41 días 1 hora restante",
+          "tiempo": "40 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -237,7 +237,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "111 días 1 hora restante",
+          "tiempo": "110 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -276,7 +276,7 @@
           "title": "Unidad II CALIDAD DE LOS SISTEMAS DE INFORMACION (1er. Corte -20%)",
           "type": "Cuestionario",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2051705",
-          "fecha_calendario": "sábado, 24 octubre, 01:02",
+          "fecha_calendario": "Mañana, 24 de octubre, 01:02",
           "estado": "Pendiente",
           "tiempo": "-",
           "fecha_entrega": null,
