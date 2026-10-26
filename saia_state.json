@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-25T15:35:13.680680",
+  "timestamp": "2026-10-26T02:26:24.684461",
   "courses": [
     {
       "id": "27752",
@@ -19,7 +19,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 15 días 11 horas",
+          "tiempo": "La Tarea está retrasada por: 15 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -49,7 +49,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 11 días 17 horas",
+          "tiempo": "La Tarea está retrasada por: 12 días 4 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -81,6 +81,16 @@
           "title": "VIDEO EXPOSITIVO 20%",
           "ponderacion": "0,00 % ( Vacío )",
           "calificacion": "-"
+        },
+        {
+          "title": "INFORME 10%",
+          "ponderacion": "0,00 % ( Vacío )",
+          "calificacion": "-"
+        },
+        {
+          "title": "TRABAJO INVESTIGATIVO 20%",
+          "ponderacion": "0,00 % ( Vacío )",
+          "calificacion": "-"
         }
       ],
       "activities": [
@@ -90,7 +100,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 7 días 11 horas",
+          "tiempo": "La Tarea está retrasada por: 7 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -100,8 +110,30 @@
           "type": "Tarea",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
           "fecha_calendario": "Hoy, 25 de octubre, 23:55",
+          "estado": "Enviado para calificar",
+          "tiempo": "La tarea fue enviada 8 horas 11 minutos antes de la fecha límite",
+          "fecha_entrega": null,
+          "es_realizada": true,
+          "es_atrasada": false
+        },
+        {
+          "title": "INFORME 10%",
+          "type": "Tarea",
+          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055049",
+          "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "12 horas 19 minutos restante",
+          "tiempo": "24 días 1 hora restante",
+          "fecha_entrega": null,
+          "es_realizada": false,
+          "es_atrasada": false
+        },
+        {
+          "title": "TRABAJO INVESTIGATIVO 20%",
+          "type": "Tarea",
+          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055051",
+          "fecha_calendario": null,
+          "estado": "Todavía no se han realizado envíos",
+          "tiempo": "40 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -131,7 +163,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 15 días 11 horas",
+          "tiempo": "La Tarea está retrasada por: 15 días 22 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -162,7 +194,7 @@
         {
           "title": "Tarea Grupal 1 (10%)",
           "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-"
+          "calificacion": "16,00"
         },
         {
           "title": "Tarea Grupal 2 (10%)",
@@ -215,7 +247,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "38 días 12 horas restante",
+          "tiempo": "38 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -237,7 +269,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "108 días 12 horas restante",
+          "tiempo": "108 días 1 hora restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
