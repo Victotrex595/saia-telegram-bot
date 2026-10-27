@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-26T18:16:56.596954",
+  "timestamp": "2026-10-27T03:01:14.737037",
   "courses": [
     {
       "id": "27752",
@@ -10,6 +10,11 @@
           "title": "IERA ACTIVIDAD EVALUATIVA CORRESPONDIENTE AL PRIMER CORTE . TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%.",
           "ponderacion": "100,00 %",
           "calificacion": "1,00"
+        },
+        {
+          "title": "Evaluacion 20% 1er corte",
+          "ponderacion": "0,00 % ( Vacío )",
+          "calificacion": "-"
         }
       ],
       "activities": [
@@ -19,10 +24,21 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 16 días 14 horas",
+          "tiempo": "La Tarea está retrasada por: 16 días 23 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
+        },
+        {
+          "title": "Evaluacion 20% 1er corte",
+          "type": "Tarea",
+          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055487",
+          "fecha_calendario": "Mañana, 27 de octubre, 22:00",
+          "estado": "Todavía no se han realizado envíos",
+          "tiempo": "22 horas 58 minutos restante",
+          "fecha_entrega": null,
+          "es_realizada": false,
+          "es_atrasada": false
         }
       ]
     },
@@ -49,7 +65,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 12 días 20 horas",
+          "tiempo": "La Tarea está retrasada por: 13 días 5 horas",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": true
@@ -60,7 +76,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2052882",
           "fecha_calendario": null,
           "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 22 minutos 32 segundos antes de la fecha límite",
+          "tiempo": "La tarea fue enviada 2 días 18 horas antes de la fecha límite",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": false
@@ -100,7 +116,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 8 días 14 horas",
+          "tiempo": "La Tarea está retrasada por: 8 días 23 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -122,7 +138,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055049",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "23 días 9 horas restante",
+          "tiempo": "23 días restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -133,7 +149,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055051",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "39 días 9 horas restante",
+          "tiempo": "39 días restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -163,7 +179,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 16 días 14 horas",
+          "tiempo": "La Tarea está retrasada por: 16 días 23 horas",
           "fecha_entrega": null,
           "es_realizada": true,
           "es_atrasada": true
@@ -247,7 +263,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "37 días 9 horas restante",
+          "tiempo": "37 días restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
@@ -269,7 +285,7 @@
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
           "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "107 días 9 horas restante",
+          "tiempo": "107 días restante",
           "fecha_entrega": null,
           "es_realizada": false,
           "es_atrasada": false
