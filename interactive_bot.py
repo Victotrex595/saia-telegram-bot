@@ -38,6 +38,30 @@ class HealthHandler(BaseHTTPRequestHandler):
                 self.wfile.write(b"Unauthorized: Token invalido.")
                 return
 
+        # Ruta del feed de Google Calendar / iCal
+        if parsed.path == "/calendar.ics":
+            try:
+                from saia_calendar import generate_ics_content
+                state_file = os.path.join(SCRIPT_DIR, "saia_state.json")
+                if os.path.exists(state_file):
+                    with open(state_file, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                else:
+                    data = {}
+                ics_data, _ = generate_ics_content(data)
+                self.send_response(200)
+                self.send_header("Content-type", "text/calendar; charset=utf-8")
+                self.send_header("Content-Disposition", 'inline; filename="saia_calendario.ics"')
+                self.end_headers()
+                self.wfile.write(ics_data.encode("utf-8"))
+                return
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-type", "text/plain; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(f"Error generando calendario: {e}".encode("utf-8"))
+                return
+
         # Ruta de chequeo de salud para Render / Koyeb
         self.send_response(200)
         self.send_header("Content-type", "text/plain; charset=utf-8")
@@ -844,6 +868,7 @@ class InteractiveBot:
             {"command": "vencidas", "description": "⚠️ Ver actividades vencidas"},
             {"command": "actualizar", "description": "🔄 Sincronizar SAIA en tiempo real"},
             {"command": "cookie", "description": "🔑 Cambiar / renovar cookie de SAIA"},
+            {"command": "calendario", "description": "📅 Suscribir a Google Calendar (iCal)"},
             {"command": "url", "description": "🌐 Ver URL en la nube y para Obsidian"},
             {"command": "help", "description": "ℹ️ Ayuda e instrucciones"}
         ]
@@ -1346,6 +1371,29 @@ class InteractiveBot:
             )
         self.send_message(chat_id, msg)
 
+    def handle_command_calendario(self, chat_id):
+        render_url = os.getenv("RENDER_EXTERNAL_URL")
+        if render_url:
+            cal_url = f"{render_url.rstrip('/')}/calendar.ics"
+            msg = (
+                "📅 <b>Suscripción a Google Calendar (SAIA)</b>\n\n"
+                "Para sincronizar tus actividades de SAIA con tu Google Calendar y que tu asistente Gemini las reconozca automáticamente:\n\n"
+                f"🔗 <b>Enlace de suscripción iCal:</b>\n<code>{cal_url}</code>\n\n"
+                "<b>📌 Cómo agregarlo en Google Calendar:</b>\n"
+                "1. Abre <a href=\"https://calendar.google.com\">calendar.google.com</a> en tu navegador.\n"
+                "2. En la barra izquierda, junto a <b>Otros calendarios</b>, pulsa <b>+</b> ➔ <b>Desde una URL</b>.\n"
+                "3. Pega el enlace de arriba y haz clic en <b>Añadir calendario</b>.\n\n"
+                "<i>¡Listo! Todas tus entregas y fechas límite aparecerán en tu calendario y tu Gem de Gemini las leerá de inmediato.</i>"
+            )
+        else:
+            msg = (
+                "📅 <b>Suscripción a Google Calendar (SAIA)</b>\n\n"
+                "ℹ️ <i>Modo local detectado.</i> Para suscribirte en Google Calendar desde cualquier lugar necesitas tu URL de Render:\n"
+                "<code>https://tu-app-en-render.onrender.com/calendar.ics</code>\n\n"
+                "También puedes importar directamente el archivo <code>saia_calendario.ics</code> generado en la carpeta del bot."
+            )
+        self.send_message(chat_id, msg)
+
     def process_updates(self):
         url = f"{self.api_url}/getUpdates?offset={self.last_update_id + 1}&timeout=15"
         try:
@@ -1396,6 +1444,8 @@ class InteractiveBot:
                         self.handle_command_cookie(cid, text)
                     elif cmd == "/url":
                         self.handle_command_url(cid)
+                    elif cmd in ["/calendario", "/calendar"]:
+                        self.handle_command_calendario(cid)
                     elif re.fullmatch(r'[a-z0-9]{20,35}', text):
                         self.send_message(cid, "🔍 <i>Detecté una cookie de SAIA. Validando tu nueva sesión...</i>")
                         self.handle_command_cookie(cid, f"/cookie {text}")

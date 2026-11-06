@@ -1,0 +1,284 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SAIA Moodle Telegram Bot//Actividades PSM//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:SAIA (PSM) - Entregas y Actividades
+X-WR-CALDESC:Calendario sincronizado automáticamente con la plataforma SAIA del Politécnico Santiago Mariño.
+X-WR-TIMEZONE:America/Caracas
+REFRESH-INTERVAL;VALUE=DURATION:PT1H
+X-PUBLISHED-TTL:PT1H
+BEGIN:VEVENT
+UID:saia-2004176@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261010T042521Z
+DTEND:20261010T045521Z
+SUMMARY:⚠️ [Atrasada] [INGENIERIA ECONOMICA] TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%
+DESCRIPTION:Materia: INGENIERIA ECONOMICA / ECONOMIA PARA INGENIEROS\nActividad: IERA ACTIVIDAD EVALUATIVA CORRESPONDIENTE AL PRIMER CORTE . TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%.\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: La Tarea está retrasada por: 2 días 20 horas\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2035535@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261009T162521Z
+DTEND:20261009T165521Z
+SUMMARY:⚠️ [Atrasada] [LAB. DE FISICA] ACTIVIDAD # 1 (10%)
+DESCRIPTION:Materia: LAB. DE FISICA\nActividad: ACTIVIDAD # 1 (10%)\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: La Tarea está retrasada por: 3 días 8 horas\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: ACTIVIDAD # 1 (10%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: ACTIVIDAD # 1 (10%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2019724@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261018T032500Z
+DTEND:20261018T035500Z
+SUMMARY:📝 [Pendiente] [METODOLOGIA DE LA INVESTIGACION II] INFORME INVESTIGATIVO 10%
+DESCRIPTION:Materia: METODOLOGIA DE LA INVESTIGACION II\nActividad: INFORME INVESTIGATIVO 10%\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 5 días 2 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: INFORME INVESTIGATIVO 10%
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: INFORME INVESTIGATIVO 10%
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2019727@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261026T032500Z
+DTEND:20261026T035500Z
+SUMMARY:📝 [Pendiente] [METODOLOGIA DE LA INVESTIGACION II] VIDEO EXPOSITIVO 20%
+DESCRIPTION:Materia: METODOLOGIA DE LA INVESTIGACION II\nActividad: VIDEO EXPOSITIVO 20%\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 13 días 2 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: VIDEO EXPOSITIVO 20%
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: VIDEO EXPOSITIVO 20%
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2023056@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261010T032521Z
+DTEND:20261010T035521Z
+SUMMARY:⚠️ [Atrasada] [PLANIFICACION DE SISTEMAS] TRABAJO DE INVESTIGACION I: 10 %
+DESCRIPTION:Materia: PLANIFICACION DE SISTEMAS\nActividad: TRABAJO DE INVESTIGACION I: 10 %\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: La Tarea está retrasada por: 2 días 21 horas\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: TRABAJO DE INVESTIGACION I: 10 %
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: TRABAJO DE INVESTIGACION I: 10 %
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2023058@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261016T033000Z
+DTEND:20261016T040000Z
+SUMMARY:⏳ [Pendiente] [PLANIFICACION DE SISTEMAS] EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)
+DESCRIPTION:Materia: PLANIFICACION DE SISTEMAS\nActividad: EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)\nTipo: Cuestionario\nEstado: Pendiente\nTiempo: //saia2\nEnlace SAIA: https://saia2.psm.edu.ve/mod/quiz/view.php?id=2023058
+URL:https://saia2.psm.edu.ve/mod/quiz/view.php?id=2023058
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022438@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:⏳ [Pendiente] [PROGRAMACION NO NUMERICA II] Taller Grupal 1 (20%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Taller Grupal 1 (20%)\nTipo: Cuestionario\nEstado: Pendiente\nTiempo: //saia2\nEnlace SAIA: https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022438
+URL:https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022438
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Taller Grupal 1 (20%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Taller Grupal 1 (20%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022447@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:📝 [Pendiente] [PROGRAMACION NO NUMERICA II] Tarea Grupal 1 (10%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Tarea Grupal 1 (10%)\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 9 días 3 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Tarea Grupal 1 (10%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Tarea Grupal 1 (10%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022454@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:⏳ [Pendiente] [PROGRAMACION NO NUMERICA II] Taller Grupal 2 (20%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Taller Grupal 2 (20%)\nTipo: Cuestionario\nEstado: Pendiente\nTiempo: //saia2\nEnlace SAIA: https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022454
+URL:https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022454
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Taller Grupal 2 (20%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Taller Grupal 2 (20%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022462@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:📝 [Pendiente] [PROGRAMACION NO NUMERICA II] Tarea Grupal 2 (10%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Tarea Grupal 2 (10%)\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 51 días 3 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Tarea Grupal 2 (10%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Tarea Grupal 2 (10%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022467@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:⏳ [Pendiente] [PROGRAMACION NO NUMERICA II] Taller grupal 3 (20%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Taller grupal 3 (20%)\nTipo: Cuestionario\nEstado: Pendiente\nTiempo: //saia2\nEnlace SAIA: https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022467
+URL:https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022467
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Taller grupal 3 (20%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Taller grupal 3 (20%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2022470@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T113000Z
+DTEND:20261014T120000Z
+SUMMARY:📝 [Pendiente] [PROGRAMACION NO NUMERICA II] Tarea Grupal 3 (20%)
+DESCRIPTION:Materia: PROGRAMACION NO NUMERICA II\nActividad: Tarea Grupal 3 (20%)\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 121 días 3 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Tarea Grupal 3 (20%)
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Tarea Grupal 3 (20%)
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:saia-2037524@psm.edu.ve
+DTSTAMP:20261106T132316Z
+DTSTART:20261014T033000Z
+DTEND:20261014T040000Z
+SUMMARY:📝 [Pendiente] [TEORIA DE LA INFORMACION] Evaluación 1er corte 10%
+DESCRIPTION:Materia: TEORIA DE LA INFORMACION\nActividad: Evaluación 1er corte 10%\nTipo: Tarea\nEstado: Todavía no se han realizado envíos\nTiempo: 1 día 3 horas restante\nEnlace SAIA: https://saia2.psm.edu.ve/mod/assign/view.php?id=2037524
+URL:https://saia2.psm.edu.ve/mod/assign/view.php?id=2037524
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega próxima: Evaluación 1er corte 10%
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Entrega en 2 horas: Evaluación 1er corte 10%
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

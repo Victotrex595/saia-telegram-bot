@@ -1,232 +1,88 @@
 {
-  "timestamp": "2026-11-06T04:21:46.402361",
+  "timestamp": "2026-10-12T20:55:21.149276",
   "courses": [
     {
       "id": "27752",
       "name": "INGENIERIA ECONOMICA / ECONOMIA PARA INGENIEROS",
-      "total": "19,00 / 40",
+      "total": "Sin calificar",
       "grades": [
         {
           "title": "IERA ACTIVIDAD EVALUATIVA CORRESPONDIENTE AL PRIMER CORTE . TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%.",
-          "ponderacion": "50,00 %",
-          "calificacion": "1,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
-          "mod_type": "assign",
-          "act_id": "2004176",
-          "is_graded": true
-        },
-        {
-          "title": "Evaluacion 20% 1er corte",
-          "ponderacion": "50,00 %",
-          "calificacion": "18,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055487",
-          "mod_type": "assign",
-          "act_id": "2055487",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
           "title": "IERA ACTIVIDAD EVALUATIVA CORRESPONDIENTE AL PRIMER CORTE . TRABAJO DE INVESTIGACION VALOR 20 PUNTOS 10%.",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2004176",
-          "fecha_calendario": "viernes, 9 de octubre de 2026, 23:59",
+          "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 27 días",
-          "fecha_entrega": "viernes, 9 de octubre de 2026, 23:59",
-          "es_realizada": true,
-          "es_atrasada": false
-        },
-        {
-          "title": "Evaluacion 20% 1er corte",
-          "type": "Tarea",
-          "mod_type": "assign",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055487",
-          "fecha_calendario": "martes, 27 de octubre de 2026, 22:00",
-          "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 37 minutos 48 segundos antes de la fecha límite",
-          "fecha_entrega": "martes, 27 de octubre de 2026, 22:00",
-          "es_realizada": true,
-          "es_atrasada": false
+          "tiempo": "La Tarea está retrasada por: 2 días 20 horas",
+          "es_realizada": false,
+          "es_atrasada": true
         }
       ]
     },
     {
       "id": "27753",
       "name": "LAB. DE FISICA",
-      "total": "11,00 / 20",
+      "total": "Sin calificar",
       "grades": [
         {
           "title": "ACTIVIDAD # 1 (10%)",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
-          "mod_type": "assign",
-          "act_id": "2035535",
-          "is_graded": false
-        },
-        {
-          "title": "ACTIVIDAD #2 (20%)",
-          "ponderacion": "100,00 %",
-          "calificacion": "11,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2052882",
-          "mod_type": "assign",
-          "act_id": "2052882",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
-          "title": "PRORROGA DE EVALUACIÓN",
-          "type": "Foro",
-          "mod_type": "forum",
-          "link": "https://saia2.psm.edu.ve/mod/forum/view.php?id=2044390",
-          "fecha_calendario": null,
-          "estado": "Pendiente",
-          "tiempo": "-",
-          "fecha_entrega": null,
-          "es_realizada": false,
-          "es_atrasada": false
-        },
-        {
-          "title": "PRORROGA",
-          "type": "Foro",
-          "mod_type": "forum",
-          "link": "https://saia2.psm.edu.ve/mod/forum/view.php?id=2055356",
-          "fecha_calendario": null,
-          "estado": "Pendiente",
-          "tiempo": "-",
-          "fecha_entrega": null,
-          "es_realizada": false,
-          "es_atrasada": false
-        },
-        {
-          "title": "PLAN DE EVALUACIÓN",
-          "type": "Foro",
-          "mod_type": "forum",
-          "link": "https://saia2.psm.edu.ve/mod/forum/view.php?id=2008725",
-          "fecha_calendario": null,
-          "estado": "Pendiente",
-          "tiempo": "-",
-          "fecha_entrega": null,
-          "es_realizada": false,
-          "es_atrasada": false
-        },
-        {
           "title": "ACTIVIDAD # 1 (10%)",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2035535",
-          "fecha_calendario": "martes, 13 de octubre de 2026, 18:00",
+          "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 23 días 6 horas",
-          "fecha_entrega": "martes, 13 de octubre de 2026, 18:00",
+          "tiempo": "La Tarea está retrasada por: 3 días 8 horas",
           "es_realizada": false,
           "es_atrasada": true
-        },
-        {
-          "title": "ACTIVIDAD #2 (20%)",
-          "type": "Tarea",
-          "mod_type": "assign",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2052882",
-          "fecha_calendario": "lunes, 26 de octubre de 2026, 17:00",
-          "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 2 días 18 horas antes de la fecha límite",
-          "fecha_entrega": "lunes, 26 de octubre de 2026, 17:00",
-          "es_realizada": true,
-          "es_atrasada": false
         }
       ]
     },
     {
       "id": "27604",
       "name": "METODOLOGIA DE LA INVESTIGACION II",
-      "total": "18,00 / 40",
+      "total": "Sin calificar",
       "grades": [
         {
           "title": "INFORME INVESTIGATIVO 10%",
-          "ponderacion": "50,00 %",
-          "calificacion": "1,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
-          "mod_type": "assign",
-          "act_id": "2019724",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         },
         {
           "title": "VIDEO EXPOSITIVO 20%",
-          "ponderacion": "50,00 %",
-          "calificacion": "17,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
-          "mod_type": "assign",
-          "act_id": "2019727",
-          "is_graded": true
-        },
-        {
-          "title": "INFORME 10%",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055049",
-          "mod_type": "assign",
-          "act_id": "2055049",
-          "is_graded": false
-        },
-        {
-          "title": "TRABAJO INVESTIGATIVO 20%",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055051",
-          "mod_type": "assign",
-          "act_id": "2055051",
-          "is_graded": false
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
           "title": "INFORME INVESTIGATIVO 10%",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019724",
-          "fecha_calendario": "sábado, 17 de octubre de 2026, 23:55",
+          "fecha_calendario": "sábado, 17 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 19 días",
-          "fecha_entrega": "sábado, 17 de octubre de 2026, 23:55",
-          "es_realizada": true,
+          "tiempo": "5 días 2 horas restante",
+          "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "VIDEO EXPOSITIVO 20%",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2019727",
-          "fecha_calendario": "domingo, 25 de octubre de 2026, 23:55",
-          "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 8 horas 11 minutos antes de la fecha límite",
-          "fecha_entrega": "domingo, 25 de octubre de 2026, 23:55",
-          "es_realizada": true,
-          "es_atrasada": false
-        },
-        {
-          "title": "INFORME 10%",
-          "type": "Tarea",
-          "mod_type": "assign",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055049",
-          "fecha_calendario": "miércoles, 18 de noviembre de 2026, 23:55",
+          "fecha_calendario": "domingo, 25 octubre, 23:55",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "12 días 23 horas restante",
-          "fecha_entrega": "miércoles, 18 de noviembre de 2026, 23:55",
-          "es_realizada": false,
-          "es_atrasada": false
-        },
-        {
-          "title": "TRABAJO INVESTIGATIVO 20%",
-          "type": "Tarea",
-          "mod_type": "assign",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2055051",
-          "fecha_calendario": "viernes, 4 de diciembre de 2026, 23:55",
-          "estado": "Todavía no se han realizado envíos",
-          "tiempo": "28 días 23 horas restante",
-          "fecha_entrega": "viernes, 4 de diciembre de 2026, 23:55",
+          "tiempo": "13 días 2 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         }
@@ -235,50 +91,38 @@
     {
       "id": "27611",
       "name": "PLANIFICACION DE SISTEMAS",
-      "total": "19,00 / 40",
+      "total": "Sin calificar",
       "grades": [
         {
           "title": "TRABAJO DE INVESTIGACION I: 10 %",
-          "ponderacion": "50,00 %",
-          "calificacion": "1,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
-          "mod_type": "assign",
-          "act_id": "2023056",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         },
         {
           "title": "EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)",
-          "ponderacion": "50,00 %",
-          "calificacion": "18,00",
-          "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2023058",
-          "mod_type": "quiz",
-          "act_id": "2023058",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
           "title": "TRABAJO DE INVESTIGACION I: 10 %",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2023056",
-          "fecha_calendario": "viernes, 9 de octubre de 2026, 23:55",
+          "fecha_calendario": null,
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "La Tarea está retrasada por: 27 días",
-          "fecha_entrega": "viernes, 9 de octubre de 2026, 23:55",
-          "es_realizada": true,
-          "es_atrasada": false
+          "tiempo": "La Tarea está retrasada por: 2 días 21 horas",
+          "es_realizada": false,
+          "es_atrasada": true
         },
         {
           "title": "EXAMEN 1: ADMINISTRACIÓN DE PROYECTOS (20%)",
           "type": "Cuestionario",
-          "mod_type": "quiz",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2023058",
-          "fecha_calendario": "viernes, 16 de octubre de 2026, 23:55",
-          "estado": "Realizado",
-          "tiempo": "Cierra: viernes, 16 de octubre de 2026, 23:55",
-          "fecha_entrega": "viernes, 16 de octubre de 2026, 23:55",
-          "es_realizada": true,
+          "fecha_calendario": "viernes, 16 octubre, 00:00",
+          "estado": "Pendiente",
+          "tiempo": "//saia2",
+          "es_realizada": false,
           "es_atrasada": false
         }
       ]
@@ -289,112 +133,79 @@
       "total": "Sin calificar",
       "grades": [
         {
-          "title": "Grupal 1 (20%)",
-          "ponderacion": "100,00 %",
-          "calificacion": "15,00",
-          "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022438",
-          "mod_type": "quiz",
-          "act_id": "2022438",
-          "is_graded": true
-        },
-        {
           "title": "Tarea Grupal 1 (10%)",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "16,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447",
-          "mod_type": "assign",
-          "act_id": "2022447",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         },
         {
           "title": "Tarea Grupal 2 (10%)",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
-          "mod_type": "assign",
-          "act_id": "2022462",
-          "is_graded": false
+          "ponderacion": "-",
+          "calificacion": "-"
         },
         {
           "title": "Tarea Grupal 3 (20%)",
-          "ponderacion": "0,00 % ( Vacío )",
-          "calificacion": "-",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
-          "mod_type": "assign",
-          "act_id": "2022470",
-          "is_graded": false
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
           "title": "Taller Grupal 1 (20%)",
           "type": "Cuestionario",
-          "mod_type": "quiz",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022438",
-          "fecha_calendario": "miércoles, 14 de octubre de 2026, 23:59",
-          "estado": "Realizado",
-          "tiempo": "Cierra: miércoles, 14 de octubre de 2026, 23:59",
-          "fecha_entrega": "miércoles, 14 de octubre de 2026, 23:59",
-          "es_realizada": true,
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
+          "estado": "Pendiente",
+          "tiempo": "//saia2",
+          "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "Tarea Grupal 1 (10%)",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022447",
-          "fecha_calendario": "miércoles, 21 de octubre de 2026, 23:59",
-          "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 8 horas 40 minutos antes de la fecha límite",
-          "fecha_entrega": "miércoles, 21 de octubre de 2026, 23:59",
-          "es_realizada": true,
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
+          "estado": "Todavía no se han realizado envíos",
+          "tiempo": "9 días 3 horas restante",
+          "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "Taller Grupal 2 (20%)",
           "type": "Cuestionario",
-          "mod_type": "quiz",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022454",
-          "fecha_calendario": "viernes, 20 de noviembre de 2026, 23:59",
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
           "estado": "Pendiente",
-          "tiempo": "Cierra: viernes, 20 de noviembre de 2026, 23:59",
-          "fecha_entrega": "viernes, 20 de noviembre de 2026, 23:59",
+          "tiempo": "//saia2",
           "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "Tarea Grupal 2 (10%)",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022462",
-          "fecha_calendario": "miércoles, 2 de diciembre de 2026, 23:59",
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "26 días 23 horas restante",
-          "fecha_entrega": "miércoles, 2 de diciembre de 2026, 23:59",
+          "tiempo": "51 días 3 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "Taller grupal 3 (20%)",
           "type": "Cuestionario",
-          "mod_type": "quiz",
           "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2022467",
-          "fecha_calendario": "miércoles, 3 de febrero de 2027, 23:59",
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
           "estado": "Pendiente",
-          "tiempo": "Cierra: miércoles, 3 de febrero de 2027, 23:59",
-          "fecha_entrega": "miércoles, 3 de febrero de 2027, 23:59",
+          "tiempo": "//saia2",
           "es_realizada": false,
           "es_atrasada": false
         },
         {
           "title": "Tarea Grupal 3 (20%)",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2022470",
-          "fecha_calendario": "miércoles, 10 de febrero de 2027, 23:59",
+          "fecha_calendario": "miércoles, 14 octubre, 08:00",
           "estado": "Todavía no se han realizado envíos",
-          "tiempo": "96 días 23 horas restante",
-          "fecha_entrega": "miércoles, 10 de febrero de 2027, 23:59",
+          "tiempo": "121 días 3 horas restante",
           "es_realizada": false,
           "es_atrasada": false
         }
@@ -403,50 +214,23 @@
     {
       "id": "26639",
       "name": "TEORIA DE LA INFORMACION",
-      "total": "39,00 / 40",
+      "total": "Sin calificar",
       "grades": [
         {
           "title": "Evaluación 1er corte 10%",
-          "ponderacion": "50,00 %",
-          "calificacion": "20,00",
-          "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2037524",
-          "mod_type": "assign",
-          "act_id": "2037524",
-          "is_graded": true
-        },
-        {
-          "title": "Unidad II CALIDAD DE LOS SISTEMAS DE INFORMACION (1er. Corte -20%)",
-          "ponderacion": "50,00 %",
-          "calificacion": "19,00",
-          "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2051705",
-          "mod_type": "quiz",
-          "act_id": "2051705",
-          "is_graded": true
+          "ponderacion": "-",
+          "calificacion": "-"
         }
       ],
       "activities": [
         {
           "title": "Evaluación 1er corte 10%",
           "type": "Tarea",
-          "mod_type": "assign",
           "link": "https://saia2.psm.edu.ve/mod/assign/view.php?id=2037524",
-          "fecha_calendario": "miércoles, 14 de octubre de 2026, 00:00",
-          "estado": "Enviado para calificar",
-          "tiempo": "La tarea fue enviada 4 minutos 1 segundos antes de la fecha límite",
-          "fecha_entrega": "miércoles, 14 de octubre de 2026, 00:00",
-          "es_realizada": true,
-          "es_atrasada": false
-        },
-        {
-          "title": "Unidad II CALIDAD DE LOS SISTEMAS DE INFORMACION (1er. Corte -20%)",
-          "type": "Cuestionario",
-          "mod_type": "quiz",
-          "link": "https://saia2.psm.edu.ve/mod/quiz/view.php?id=2051705",
-          "fecha_calendario": "martes, 27 de octubre de 2026, 23:55",
-          "estado": "Realizado",
-          "tiempo": "Cierra: martes, 27 de octubre de 2026, 23:55",
-          "fecha_entrega": "martes, 27 de octubre de 2026, 23:55",
-          "es_realizada": true,
+          "fecha_calendario": "miércoles, 14 octubre, 00:00",
+          "estado": "Todavía no se han realizado envíos",
+          "tiempo": "1 día 3 horas restante",
+          "es_realizada": false,
           "es_atrasada": false
         }
       ]

@@ -758,5 +758,12 @@ def main():
         json.dump(current_state, f, ensure_ascii=False, indent=2)
     print("[OK] Estado actualizado y guardado en saia_state.json.")
 
+    try:
+        from saia_calendar import export_local_ics
+        ics_path = os.path.join(os.path.dirname(STATE_FILE), "saia_calendario.ics")
+        export_local_ics(STATE_FILE, ics_path)
+    except Exception as e:
+        print(f"[Aviso] No se pudo generar saia_calendario.ics: {e}")
+
 if __name__ == "__main__":
     main()
